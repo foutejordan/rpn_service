@@ -6,6 +6,9 @@ def rpn_cal(expression):
     print(expression_list)
 
     for i, item in enumerate(expression_list):
+        if not item.isdigit() and item not in operations:
+            raise ValueError("Expression must not contain characters..")
+
         if i == 0 and item in operations:
             raise ValueError("no operands enough")
         else:
