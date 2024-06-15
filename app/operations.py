@@ -1,7 +1,6 @@
-operations = ["+", "-", "*", "/"]
-
 
 def rpn(expression):
+    operations = ["+", "-", "*", "/"]
     queue = []
     expression_list = expression.split()
     print(expression_list)
@@ -33,12 +32,7 @@ def rpn(expression):
                     queue.append(temp)
                 else:
                     raise ValueError("error, invalid operation")
-    if (len(queue) > 1 or len(queue) == 0):
+    if len(queue) > 1 or len(queue) == 0:
         ValueError("error, result has 2 elements on the list")
     else:
         return queue.pop()
-
-
-if __name__ == "__main__":
-    result = rpn("5 8 + + 5 * 5 /")
-    print(result)
