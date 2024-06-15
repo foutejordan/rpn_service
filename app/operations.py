@@ -2,8 +2,7 @@
 def rpn_cal(expression):
     operations = ["+", "-", "*", "/"]
     queue = []
-    expression_list = expression.split()
-    print(expression_list)
+    expression_list = [i for i in expression.replace(" ", "")]
 
     for i, item in enumerate(expression_list):
         if not item.isdigit() and item not in operations:
