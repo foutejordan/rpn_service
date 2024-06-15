@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from .operations import rpn_cal
+import time
+
 
 app = FastAPI()
 
@@ -9,11 +11,13 @@ def get():
 
 @app.post("/evaluate/", response_model=dict[str, int])
 def evaluate(operation: str):
-    print(operation)
     try:
         if operation is not None:
+            start_time = time.time()
             result = rpn_cal(operation)
-            return {"result": result}
+            end_time = time.time()
+            execution_time = end_time - start_time
+            return {"result": result, "execution_time": execution_time}
         else:
             return {"Error": "Veullez entrer une expression Npi"}
 
