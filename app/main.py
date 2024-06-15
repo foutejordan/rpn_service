@@ -5,10 +5,18 @@ from .utils import format_expression
 import time
 import hashlib
 import redis
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
-redis_instance = redis.Redis(host='localhost', port=6379, decode_responses=True)
+redis_host = os.environ.get("REDIS_HOST")
+redis_port = os.environ.get("REDIS_PORT")
+
+
+redis_instance = redis.Redis(host=redis_host,  port=int(redis_port), decode_responses=True)
 
 
 @app.post("/evaluate/", response_model=OperationResponse)
@@ -23,12 +31,13 @@ def evaluate(operation: OperationRequest):
             result_from_db = redis_instance.hgetall(expression_key)
             print(result_from_db)
 
-            if result_from_db is not None:
+            if "result" in result_from_db.keys():
                 result = result_from_db["result"]
             else:
-                result = rpn_cal(operation.expression)
+                result = rpn_cal(expression)
 
                 redis_instance.hset(expression_key, mapping={
+                    "npi_expression": expression,
                     "result": result,
                 })
             end_time = time.time()
