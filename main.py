@@ -8,8 +8,7 @@ def rpn(expression):
 
     for i, item in enumerate(expression_list):
         if i == 0 and item in operations:
-            print("no operands enough")
-            break
+            raise ValueError("no operands enough")
         else:
             if item.isdigit():
                 queue.append(item)
@@ -18,8 +17,7 @@ def rpn(expression):
                 if len(queue) > 0:
                     operand2 = int(queue.pop())
                 else:
-                    print("invalid expression")
-                    break
+                    raise ValueError("invalid expression")
 
                 if item == "+":
                     temp = operand2 + operand1
@@ -31,14 +29,12 @@ def rpn(expression):
                     temp = operand2 * operand1
                     queue.append(temp)
                 elif item == "/":
-                    temp = operand2 / operand1
+                    temp = operand2 / operand1 if operand1 != 0 else float('inf')
                     queue.append(temp)
                 else:
-                    print('error, invalid operation')
-            print(queue)
-    print(queue)
+                    raise ValueError("error, invalid operation")
     if (len(queue) > 1 or len(queue) == 0):
-        print("error, result has 2 elements on the list")
+        ValueError("error, result has 2 elements on the list")
     else:
         return queue.pop()
 
