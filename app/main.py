@@ -2,11 +2,13 @@ from fastapi import FastAPI, HTTPException
 from .operations import rpn_cal
 from .schemas import OperationRequest, OperationResponse
 from .utils import format_expression
+from .export_csv import export_operations_to_csv
 import time
 import hashlib
 import redis
 import os
 from dotenv import load_dotenv
+from fastapi.responses import StreamingResponse
 
 load_dotenv()
 
@@ -15,8 +17,15 @@ app = FastAPI()
 redis_host = os.environ.get("REDIS_HOST")
 redis_port = os.environ.get("REDIS_PORT")
 
+redis_instance = redis.Redis(host=redis_host, port=int(redis_port), decode_responses=True)
 
-redis_instance = redis.Redis(host=redis_host,  port=int(redis_port), decode_responses=True)
+
+@app.get("/export-csv/")
+def export_csv():
+    csv_data = export_operations_to_csv(redis_instance)
+    response = StreamingResponse(iter([csv_data.getvalue()]), media_type="text/csv")
+    response.headers["Content-Disposition"] = "attachment; filename=operations.csv"
+    return response
 
 
 @app.post("/evaluate/", response_model=OperationResponse)
