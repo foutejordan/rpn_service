@@ -1,5 +1,5 @@
 
-def rpn(expression):
+def rpn_cal(expression):
     operations = ["+", "-", "*", "/"]
     queue = []
     expression_list = expression.split()
