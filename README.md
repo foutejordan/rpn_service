@@ -62,6 +62,10 @@ This command will:
 - Build the python Docker image specified in the Dockerfile.
 - Start the containers for the python API and Redis services as defined in the docker-compose.yml file.
 
+To execute tests into the container:
+```bash
+docker run --entrypoint "pytest" rpn_service-app
+```
 ### Step 4: Access the API
 
 After starting the services, you can access the API documentation at the following URLs:
