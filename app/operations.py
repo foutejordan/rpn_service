@@ -1,4 +1,17 @@
 def rpn_cal(expression):
+        """
+           Évalue une expression en notation polonaise inverse (NPI).
+
+           Args:
+               expression (str): L'expression en NPI à évaluer.
+
+           Returns:
+               float: Le résultat de l'évaluation de l'expression.
+
+           Raises:
+               ValueError: Si l'expression est invalide ou contient des caractères non supportés.
+        """
+
         operations = ["+", "-", "*", "/"]
         queue = []
         for i, item in enumerate(expression.split()):

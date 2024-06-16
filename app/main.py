@@ -20,7 +20,7 @@ redis_port = os.environ.get("REDIS_PORT")
 redis_instance = redis.Redis(host=redis_host, port=int(redis_port), decode_responses=True)
 
 
-@app.get("/export-csv/")
+@app.get("/export-csv/", tags=["Export Database"])
 def export_csv():
     csv_data = export_operations_to_csv(redis_instance)
     response = StreamingResponse(iter([csv_data.getvalue()]), media_type="text/csv")
@@ -28,7 +28,7 @@ def export_csv():
     return response
 
 
-@app.post("/evaluate/", response_model=OperationResponse)
+@app.post("/evaluate/", response_model=OperationResponse, tags=["RPN Calculator"], summary="Evaluate an RPN expression", description="This endpoint evaluates an expression in Reverse Polish Notation (RPN) and returns the result.")
 def evaluate(operation: OperationRequest):
     try:
         if operation.npi_expression is not None:
