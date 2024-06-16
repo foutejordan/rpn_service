@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class OperationRequest(BaseModel):
-    expression: str
+    npi_expression: str
 
 
 class OperationResponse(BaseModel):

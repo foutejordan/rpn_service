@@ -1,38 +1,39 @@
-
 def rpn_cal(expression):
-    operations = ["+", "-", "*", "/"]
-    queue = []
-    for i, item in enumerate(expression):
-        if not item.isdigit() and item not in operations:
-            raise ValueError("Expression must not contain characters..")
+        operations = ["+", "-", "*", "/"]
+        queue = []
+        for i, item in enumerate(expression.split()):
+            if not item.isdigit() and item not in operations:
+                raise ValueError("Expression must contain space between or  must not contain characters..")
 
-        if i == 0 and item in operations:
-            raise ValueError("no operands enough")
-        else:
-            if item.isdigit():
-                queue.append(item)
+            if i == 0 and item in operations:
+                raise ValueError("no operands enough")
             else:
-                operand1 = int(queue.pop())
-                if len(queue) > 0:
-                    operand2 = int(queue.pop())
+                if item.isdigit():
+                    queue.append(item)
                 else:
-                    raise ValueError("invalid expression")
+                    operand1 = int(queue.pop())
+                    if len(queue) > 0:
+                        operand2 = int(queue.pop())
+                    else:
+                        raise ValueError("invalid expression")
 
-                if item == "+":
-                    temp = operand2 + operand1
-                    queue.append(temp)
-                elif item == "-":
-                    temp = operand2 - operand1
-                    queue.append(temp)
-                elif item == "*":
-                    temp = operand2 * operand1
-                    queue.append(temp)
-                elif item == "/":
-                    temp = operand2 / operand1 if operand1 != 0 else float('inf')
-                    queue.append(temp)
-                else:
-                    raise ValueError("error, invalid operation")
-    if len(queue) > 1 or len(queue) == 0:
-        ValueError("error, result has 2 elements on the list")
-    else:
-        return queue.pop()
+                    if item == "+":
+                        temp = operand2 + operand1
+                        queue.append(temp)
+                    elif item == "-":
+                        temp = operand2 - operand1
+                        queue.append(temp)
+                    elif item == "*":
+                        temp = operand2 * operand1
+                        queue.append(temp)
+                    elif item == "/":
+                        if operand1 == 0:
+                            raise ValueError("error, can't divide by zero")
+                        temp = operand2 / operand1
+                        queue.append(temp)
+                    else:
+                        raise ValueError("error, invalid operation")
+        if len(queue) > 1 or len(queue) == 0:
+            raise ValueError("error, result has 2 elements on the list")
+        else:
+            return queue.pop()

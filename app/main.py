@@ -31,17 +31,17 @@ def export_csv():
 @app.post("/evaluate/", response_model=OperationResponse)
 def evaluate(operation: OperationRequest):
     try:
-        if operation.expression is not None:
+        if operation.npi_expression is not None:
             start_time = time.time()
 
-            expression = format_expression(operation.expression)
+            expression = operation.npi_expression
 
-            expression_key = hashlib.sha256(("".join(expression)).encode("utf-8")).hexdigest()
-            result_from_db = redis_instance.hgetall(expression_key)
+            expression_key = hashlib.sha256(expression.encode("utf-8")).hexdigest()
+            result_from_db = redis_instance.hgetall(expression_key) if redis_instance.type(
+                expression_key) == 'hash' else None
             print(result_from_db)
-
-            if "result" in result_from_db.keys():
-                result = result_from_db["result"]
+            if result_from_db is not None:
+                result = float(result_from_db["result"])
             else:
                 result = rpn_cal(expression)
 
